@@ -40,7 +40,7 @@ foreach my $file (@files) {
 	    $variant += $n[0]+$y[2];
 	}
 	else {$variant += $y[1];}
-	my $ratio=sprintf("%.4f", $variant/($variant+$c[6]));
+	my $ratio=sprintf("%.4f", ($variant*2)/($variant*2+$c[6]));
 	
 	$line =~ s/:\d+//g;
 	print output "$line\t$variant\t$c[6]\t$ratio\n";

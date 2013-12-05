@@ -11,7 +11,7 @@ usage() {
 echo -en "\e[1;36m"
 cat <<EOF
 
-usage: $0 -i input_file.sorted.bam -s scripts_directory -o output_directory -r transposon_database.fa -f fragment_size -c CPUs -h 
+usage: $0 -i input_file.sorted.bam -s scripts_directory -o output_directory -r transposon_database.fa -t annotated_TEs.bed -f fragment_size -c CPUs -h 
 
 TEMP is a software package for detecting transposable elements (TEs) 
 insertions and excisions from pooled high-throughput sequencing data. 
@@ -24,8 +24,7 @@ Options:
         -s     Directory where all the scripts are
         -o     Path to output directory. Default is current directory
         -r     Transposon sequence database in fasta format with full path
-        -t     Annotated TEs in BED format with full path. If specified those insertions overlap with annoated TEs will be filtered. 
-               If not specified, such filtering is not performed.
+        -t     Annotated TEs in BED6 format with full path. Detectied snsertions that overlap with annoated TEs will be filtered. 
         -f     An integer specifying the length of the fragments (inserts) of the library. Default is 500
         -c     An integer specifying the number of CUPs used. Default is 8
         -h     Show help message
@@ -68,7 +67,7 @@ do
         esac
 done
 
-if [[ -z $BAM ]] || [[ -z $BINDIR ]] || [[ -z $TESEQ ]]
+if [[ -z $BAM ]] || [[ -z $BINDIR ]] || [[ -z $TESEQ ]] || [[ -z $ANNO ]]
 then
         usage && exit 1
 fi
@@ -119,18 +118,22 @@ bwa sampe -P $te $i.unpair.uniq.1.sai $i.unpair.uniq.2.sai $i.unpair.uniq.1.fast
 #Summary
 samtools view -hSXF 0x2 $i.unpair.uniq.transposons.sam > $i.unpair.uniq.transposons.unpair.sam
 perl $BINDIR/pickUniqMate.pl $i.unpair.uniq.transposons.unpair.sam $i.unpair.uniq.bed > $i.unpair.uniq.transposons.bed
+cp $i.unpair.uniq.transposons.bed $i.unpair.uniq.transposons.filtered.bed
 
-# Throw out false positives
-perl $BINDIR/filterFalsePositive.in.pl $i.unpair.uniq.transposons.bed > $i.unpair.uniq.transposons.fp.bed
-ediff $i.unpair.uniq.transposons.bed diff $i.unpair.uniq.transposons.fp.bed > $i.unpair.uniq.transposons.filtered.bed
+# Throw out false positives (TEs that overlap with annotated TEs)
+#perl $BINDIR/filterFalsePositive.in.pl $i.unpair.uniq.transposons.bed $ANNO > $i.unpair.uniq.transposons.fp.bed
+#if [[ -s $i.unpair.uniq.transposons.fp.bed ]]
+#then
+#    bedtools subtract -a $i.unpair.uniq.transposons.bed -b $i.unpair.uniq.transposons.fp.bed -f 1.0 > $i.unpair.uniq.transposons.filtered.bed
+#else 
+#    cp $i.unpair.uniq.transposons.bed $i.unpair.uniq.transposons.filtered.bed
+#fi
 
 #Prepare for insertion breakpoints identification
 awk -F "\t" -v sample=$i '{OFS="\t"; print $1,$2,$3,sample,$5,$6}' $i.unpair.uniq.transposons.filtered.bed >> tmp
-grep FBgn0000224_BS tmp | egrep "\+51|\-51" > tmp.BS
-ediff tmp diff tmp.BS > tmp2
-perl $BINDIR/mergeTagsWithoutGap.pl tmp2 > $i.uniq.transposons.filtered.woGap.bed
+perl $BINDIR/mergeTagsWithoutGap.pl tmp > $i.uniq.transposons.filtered.woGap.bed
 perl $BINDIR/mergeTagsWithGap.pl $i.uniq.transposons.filtered.woGap.bed $INSERT > $i.uniq.transposons.filtered.wGap.bed
-rm tmp2 tmp.BS tmp
+rm tmp
 perl $BINDIR/get_class.pl $i.uniq.transposons.filtered.wGap.bed $i > $i.uniq.transposons.filtered.wGap.class.bed
 perl $BINDIR/make.bp.bed.pl $i.uniq.transposons.filtered.wGap.class.bed
 
@@ -148,20 +151,19 @@ rm $i.pair.bam $i.pair.bam.bai
 #Estimate insertion frequencies
 perl $BINDIR/pickOverlapPair.in.pl $i.insertion.refined.bp $INSERT > $i.insertion.refined.bp.summary
 
+
 #Remove called sites that overlap with annotated TEs
-if [[ ! -z $ANNO ]]
+awk -F "\t" '{OFS="\t"; if ($5=="antisense") $5="-"; if ($5=="sense") $5="+"; if ($1 ~ /^chr/) print $1,$2,$3,$4,".",$5}' $i.insertion.refined.bp.summary > tmp
+bedtools intersect -a tmp -b $ANNO -f 0.1 -wo -s > tmp1
+awk -F "\t" '{OFS="\t"; if (($4==$10)&&($6==$12)) print $1,$2,$3,$4,$5,$6}' tmp1 > tmp2
+if [[ -s "tmp2" ]]
 then
-    awk -F "\t" '{OFS="\t"; if ($1 ~ /^chr/) print $1,$2,$3,$4}' $i.insertion.refined.bp.summary > tmp
-    bedtools intersect -a tmp -b $ANNO -f 0.3 -wo > tmp1
-    awk -F "\t" '{OFS="\t"; print $1,$2,$3,$4}' tmp1 > tmp2
-    if [[ -s "tmp2" ]]
-    then
-	bedtools subtract -a tmp1 -b tmp2 > tmp3
-	head -n 1 $i.insertion.refined.bp.summary > tmp4
-	cat tmp4 tmp3 > $i.insertion.refined.bp.summary
-    fi
-    rm tmp*
+    awk -F "\t" '{OFS="\t"; if ($1 ~ /^chr/) print}' $i.insertion.refined.bp.summary > tmp1
+    bedtools subtract -a tmp1 -b tmp2 -f 1.0 > tmp3
+    head -n 1 $i.insertion.refined.bp.summary > tmp4
+    cat tmp4 tmp3 > $i.insertion.refined.bp.summary
 fi
+rm tmp*
 
 ################################
 ##End of processing insertions##

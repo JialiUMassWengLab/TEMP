@@ -23,7 +23,7 @@ Options:
                Sorting and indexing can be done by 'samtools sort' and 'samtools index'
         -s     Directory where all the scripts are
         -o     Path to output directory. Default is current directory
-        -r     Annotated transposon positions in the genome (e.g., repeakMask) in bed format with full path
+        -r     Annotated transposon positions in the genome (e.g., repeakMask) in bed6 format with full path
         -t     2bit file for the reference genome (can be downloaded from UCSC Genome Browser)
         -f     An integer specifying the length of the fragments (inserts) of the library. Default is 500
         -c     An integer specifying the number of CUPs used. Default is 4
@@ -114,8 +114,8 @@ rm temp1.sam $i.unpair.sam
 bedtools intersect -a $TEBED -b $i.unproper.uniq.interval.bed -f 1.0 -wo > temp
 perl $BINDIR/filterFalsePositive.ex.pl temp $INSERT $i.final.pairs.rpmk.bed
 bedtools intersect -a $TEBED -b $i.final.pairs.rpmk.bed -f 1.0 -wo > temp2
-perl $BINDIR/excision.clustering.pl temp2 $i.excision.cluster.rpmk
 
+perl $BINDIR/excision.clustering.pl temp2 $i.excision.cluster.rpmk
 rm temp temp2 $i.unproper.uniq.interval.bed $i.final.pairs.rpmk.bed
 
 # Identify breakpoints using soft-clipping information

@@ -9,13 +9,13 @@ my %coordinate=();
 while (my $line=<input>) {
     chomp($line);
     my @a=split(/\t/, $line);
-    if (defined $leng{$a[8]}) {
-	$trans{$a[8]} += $a[2]-$a[1];
+    if (defined $leng{$a[9]}) {
+	$trans{$a[9]} += $a[2]-$a[1];
     }
     else {
-	$leng{$a[8]}=$a[7]-$a[6]-10;
-	$trans{$a[8]}=$a[2]-$a[1];
-	$coordinate{$a[8]}="$a[5]\:$a[6]\:$a[7]";
+	$leng{$a[9]}=$a[8]-$a[7]-10;
+	$trans{$a[9]}=$a[2]-$a[1];
+	$coordinate{$a[9]}="$a[6]\:$a[7]\:$a[8]";
     }
 }
 close input;

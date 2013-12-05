@@ -2,7 +2,7 @@
 use List::Util qw(max min);
 #system("windowBed -a $ARGV[0] -b /home/wangj2/flycommon/all_transposons.dml.rmskCrossmatch.bed -sw -r 1000 -l 0 > tmp");
 #system("windowBed -a $ARGV[0] -b /home/wangj2/flycommon/soo.trnalnpos.map2.sort.bed -sw -r 1000 -l 0 > tmp");
-system("windowBed -a $ARGV[0] -b /home/wangj2/flycommon/all_transposons.dml.rmskCrossmatchSplit.bed -sw -r 1000 -l 0 > tmp");
+system("bedtools window -a $ARGV[0] -b $ARGV[1] -sw -r 1000 -l 0 > tmp");
 
 open in,"tmp";
 my %read;
@@ -35,3 +35,5 @@ while(<in>)
 	}
 }
 close in;
+
+system("rm tmp");

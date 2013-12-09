@@ -1,18 +1,25 @@
-﻿TEMP (Transposable Element Movement in Population) Manual
+TEMP (Transposable Element Movement in Population) Manual
 
 
-2013.8.22
+2013.12.09
 
 
 TEMP is a software designed to 1) detect transposable elements (TEs) insertions and excisions relative to the reference genome, 2) define the genome-TE junctions up to base pair resolution when it is possible, and 3) estimate the population frequency of the detected insertions and excisions. This document provides information concerning how to run TEMP, what options to use, and how to interpret the outputs. If you have any questions or find any bugs please contact Jiali Zhuang through jiali.zhuang@umassmed.edu. 
 
 
 
-
 Requirement and installation
 
 
-TEMP runs on Linux X64 systems. Samtools (http://samtools.sourceforge.net/) and bedtools (http://code.google.com/p/bedtools/) are required and should be included in the path. For installing TEMP just unzip and untar the file. In the directory TEMP_v1.0/ there are two bash scripts TEMP_Insertion.sh and TEMP_Excision.sh for TE insertion and excision analysis, respectively. 
+TEMP runs on Linux x86_64 systems. 
+Following softwares are required by TEMP and should be included in the path:
+Samtools (http://samtools.sourceforge.net/),
+bedtools (http://code.google.com/p/bedtools/),
+bwa (http://sourceforge.net/projects/bio-bwa/).
+Perl package BioPerl is also required for running TEMP (http://www.bioperl.org/wiki/Main_Page).
+
+For installing TEMP just unzip and untar the file. 
+In the directory TEMP_v1.01/ there are two bash scripts TEMP_Insertion.sh and TEMP_Excision.sh for TE insertion and excision analysis, respectively. 
 
 
 
@@ -26,25 +33,28 @@ For TEMP_Insertion.sh the arguments to the options are explained below:
        -i    Input file in bam format with full path. The users need to map the reads to the reference genome using mapping softwares such as BWA (http://bio-bwa.sourceforge.net/). Please sort and index the bam files before calling TEMP. Sorting and indexing can be done by 'samtools sort' and 'samtools index'.
 
 
-       -s     The full path to the scripts in directory TEMP_v1.0/.
+       -s    The full path to the scripts in directory TEMP_v1.0/.
 
 
-       -o     The full path to output directory. Default is current directory.
+       -o    The full path to output directory. Default is current directory.
 
 
-       -r   Transposon consensus sequence fasta format with full path. Such files can be downloaded from Repbase (http://www.girinst.org/repbase/).
+       -r    Transposon consensus sequence fasta format with full path. Such files can be downloaded from Repbase (http://www.girinst.org/repbase/).
 
 
-       -t      Annotated transposon positions in the genome (e.g., RepeakMasker) in bed format with full path. If specified, called insertions overlap with an annotated TE will be filtered. If NOT specified the filtering will not take place.
+       -t    Annotated transposon positions in the genome (e.g., RepeakMasker) in bed6 format with full path. 
+       
+       
+       -m    Number of mismatch allowed when mapping to TE concensus sequences.
 
 
-       -f      An integer specifying the length of the fragments (inserts) of the library. Default is 500.
+       -f    An integer specifying the length of the fragments (inserts) of the library. Default is 500.
 
 
-       -c     An integer specifying the number of CUPs used. Default is 8.
+       -c    An integer specifying the number of CUPs used. Default is 8.
 
 
-       -h     Show help message.
+       -h    Show help message.
 
 
 
@@ -52,28 +62,28 @@ For TEMP_Insertion.sh the arguments to the options are explained below:
 For TEMP_Excision.sh the arguments to the options are explained below:
 
 
-       -i     Input file in bam format with full path. The users need to map the reads to the reference genome using mapping softwares such as BWA (http://bio-bwa.sourceforge.net/). Please sort and index the bam files before calling TEMP. Sorting and indexing can be done by 'samtools sort' and 'samtools index'.
+       -i    Input file in bam format with full path. The users need to map the reads to the reference genome using mapping softwares such as BWA (http://bio-bwa.sourceforge.net/). Please sort and index the bam files before calling TEMP. Sorting and indexing can be done by 'samtools sort' and 'samtools index'.
 
 
-       -s     The full path to the scripts in directory TEMP_v1.0/.
+       -s    The full path to the scripts in directory TEMP_v1.0/.
 
 
-       -o     Path to output directory. Default is current directory.
+       -o    Path to output directory. Default is current directory.
 
 
-       -r     Annotated transposon positions in the genome (e.g., RepeakMasker) in bed format with full path. For major model organisms such file can be downloaded from UCSC Genome Browser. In Table Browser page just choose “variation and repeats” in the group tab and “RepeatMasker” in the track tab. 
+       -r    Annotated transposon positions in the genome (e.g., RepeakMasker) in bed6 format with full path. For major model organisms such file can be downloaded from UCSC Genome Browser. In Table Browser page just choose “variation and repeats” in the group tab and “RepeatMasker” in the track tab. 
 
 
-       -t     2bit file for the reference genome. Such file can be downloaded from UCSC Genome Browser. In Downloads page choose the right genome, click on the “Full data set” link and download the *.2bit file.  
+       -t    2bit file for the reference genome. Such file can be downloaded from UCSC Genome Browser. In Downloads page choose the right genome, click on the “Full data set” link and download the *.2bit file.  
 
 
-       -f     An integer specifying the length of the fragments (inserts) of the library. Default is 500.
+       -f    An integer specifying the length of the fragments (inserts) of the library. Default is 500.
 
 
-       -c     An integer specifying the number of CUPs used. Default is 4.
+       -c    An integer specifying the number of CUPs used. Default is 4.
 
 
-       -h     Show help message.
+       -h    Show help message.
 
 
 

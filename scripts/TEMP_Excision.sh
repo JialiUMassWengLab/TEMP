@@ -97,11 +97,17 @@ checkExist "bwa"
 checkExist "samtools"
 echo -e "\e[1;35mDone with testing required softwares/scripts, starting pipeline...\e[0m"
 
-cp $BAM $BAM.bai ./
 name=`basename $BAM`
 i=${name/.sorted.bam/}
 echo $name
 echo $i
+if [[ ! -s $name ]]
+then
+    cp $BAM ./
+fi
+if [[ ! -s $name.bai ]]
+then cp $BAM.bai ./
+fi
 
 #Detect excision sites
 samtools view -XF 0x2 $name > $i.unpair.sam

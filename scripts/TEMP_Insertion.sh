@@ -11,7 +11,7 @@ usage() {
 echo -en "\e[1;36m"
 cat <<EOF
 
-usage: $0 -i input_file.sorted.bam -s scripts_directory -o output_directory -r transposon_database.fa -t annotated_TEs.bed -f fragment_size -c CPUs -h 
+usage: $0 -i input_file.sorted.bam -s scripts_directory -o output_directory -r transposon_database.fa -t annotated_TEs.bed -m MISMATCH -f fragment_size -c CPUs -h 
 
 TEMP is a software package for detecting transposable elements (TEs) 
 insertions and excisions from pooled high-throughput sequencing data. 
@@ -25,6 +25,7 @@ Options:
         -o     Path to output directory. Default is current directory
         -r     Transposon sequence database in fasta format with full path
         -t     Annotated TEs in BED6 format with full path. Detectied snsertions that overlap with annoated TEs will be filtered. 
+        -m     Number of mismatch allowed when mapping to TE concensus sequences
         -f     An integer specifying the length of the fragments (inserts) of the library. Default is 500
         -c     An integer specifying the number of CUPs used. Default is 8
         -h     Show help message
@@ -34,7 +35,7 @@ echo -en "\e[0m"
 }
 
 # taking options
-while getopts "hi:c:f:o:r:s:t:" OPTION
+while getopts "hi:c:f:m:o:r:s:t:" OPTION
 do
         case $OPTION in
                 h)
@@ -45,6 +46,9 @@ do
 		;;
 	        f)
 		        INSERT=$OPTARG
+		;;
+	        m)
+		        MM=$OPTARG
 		;;
                 o)
                         OUTDIR=$OPTARG
@@ -73,6 +77,7 @@ then
 fi
 [ ! -z "${CPU##*[!0-9]*}" ] || CPU=8
 [ ! -z "${INSERT##*[!0-9]*}" ] || INSERT=500
+[ ! -z "${MM##*[!0-9]*}" ] || MM=3
 [ ! -z $OUTDIR ]  || OUTDIR=$PWD
 
 mkdir -p "${OUTDIR}" || echo -e "\e[1;31mWarning: Cannot create directory ${OUTDIR}. Using the direcory of input fastq file\e[0m"
@@ -97,12 +102,19 @@ checkExist "bwa"
 checkExist "samtools"
 echo -e "\e[1;35mDone with testing required softwares/scripts, starting pipeline...\e[0m"
 
-cp $BAM $BAM.bai $TESEQ ./
+cp $TESEQ ./
 name=`basename $BAM`
 te=`basename $TESEQ`
 i=${name/.sorted.bam/}
 echo $name
 echo $i
+if [[ ! -s $name ]]
+then
+    cp $BAM ./
+fi
+if [[ ! -s $name.bai ]]
+then cp $BAM.bai ./
+fi
 
 # Get the mate seq of the uniq-unpaired reads
 samtools view -XF 0x2  $name > $i.unpair.sam
@@ -111,8 +123,8 @@ perl $BINDIR/pickUniqPos.pl $i.unpair.sam > $i.unpair.uniq.bed
 
 # Map to transposons
 bwa index -a is $te
-bwa aln -t $CPU -n 1 -l 100 -R 1000 $te $i.unpair.uniq.1.fastq > $i.unpair.uniq.1.sai
-bwa aln -t $CPU -n 1 -l 100 -R 1000 $te $i.unpair.uniq.2.fastq > $i.unpair.uniq.2.sai
+bwa aln -t $CPU -n $MM -l 100 -R 1000 $te $i.unpair.uniq.1.fastq > $i.unpair.uniq.1.sai
+bwa aln -t $CPU -n $MM -l 100 -R 1000 $te $i.unpair.uniq.2.fastq > $i.unpair.uniq.2.sai
 bwa sampe -P $te $i.unpair.uniq.1.sai $i.unpair.uniq.2.sai $i.unpair.uniq.1.fastq $i.unpair.uniq.2.fastq > $i.unpair.uniq.transposons.sam
 
 #Summary

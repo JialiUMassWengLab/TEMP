@@ -10,6 +10,23 @@ if ($title =~ /annotation/) {
 }
 else {$title =~ s/excision.cluster.rpmk/sorted.bam/;}
 
+my %chrs=();
+system("samtools view -H $title > header");
+open (input, "<header") or die "Can't open header since $!\n";
+while (my $line=<input>) {
+    if ($line =~ /^\@SQ/) {
+	my @a=split(/\t/, $line);
+	for my $j (0..$#a) {
+	    if ($a[$j] =~ /^SN:/) {
+		$a[$j] =~ s/^SN://;
+		$chrs{$a[$j]}=1;
+	    }
+	}
+    }
+}
+close input;
+system("rm header");
+
 open (input, "<$ARGV[0]") or die "Can't open $ARGV[0] since $!\n";
 while (my $line=<input>) {
     chomp($line);
@@ -17,7 +34,10 @@ while (my $line=<input>) {
 
     my $lower=$a[3]-100;
     my $upper=$a[4]+100;
-    system("samtools view -bu $title $a[2]\:$lower\-$upper > temp.bam");
+    my $chr_num=$a[2];
+    $chr_num =~ s/chr//;
+    if (($chrs{$a[2]} == 1) && (! defined $chrs{$chr_num})) {$chr_num=$a[2];}
+    system("samtools view -bu $title $chr_num\:$lower\-$upper > temp.bam");
     system("samtools view -Xf 0x2 temp.bam > temp.sam");
 
     my $leftseq="";

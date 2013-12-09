@@ -45,7 +45,9 @@ for my $file (@files) {
 	    }
 	}
 
-	if (($a[0] =~ /^chr/) && ($a[1] > 0)) {
+	if ((($a[0] =~ /^chr/) || ($a[0] =~ /^\d{1,3}$/)) && ($a[1] > 0)) {
+	    $a[1] += 15;
+	    $a[2] -= 15;
 	    print output "$a[0]\t$a[1]\t$a[2]\t$a[3]\t$strand\t$class\t";
 	    if (($minus >= 1)&&($plus >= 1)&&(abs($plusmax-$minusmax) <= 25)) {
 #		$psup += $minus;

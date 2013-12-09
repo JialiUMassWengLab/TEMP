@@ -11,6 +11,23 @@ if ($title =~ /annotation/) {
 else {$title =~ s/excision.cluster.rpmk.refined.bp/sorted.bam/;}
 #system("samtools index /home/wangj2/scratch/bill/bill_genomic/$title");
 
+my %chrs=();
+system("samtools view -H $title > header");
+open (input, "<header") or die "Can't open header since $!\n";
+while (my $line=<input>) {
+    if ($line =~ /^\@SQ/) {
+	my @a=split(/\t/, $line);
+	for my $j (0..$#a) {
+            if ($a[$j] =~ /^SN:/) {
+		$a[$j] =~ s/^SN://;
+		$chrs{$a[$j]}=1;
+            }
+	}
+    }
+}
+close input;
+system("rm header");
+
 open (input, "<$ARGV[0]") or die "Can't open $ARGV[0] since $!\n";
 my $header=<input>;
 while (my $line=<input>) {
@@ -36,7 +53,10 @@ while (my $line=<input>) {
     my $leftupper=$left+500;
     my $rightlower=$right-500;
     my $rightupper=$right+500;
-    system("samtools view -bu $title $a[0]\:$leftlower\-$leftupper $a[0]\:$rightlower\-$rightupper > temp.bam");
+    my $chr_num=$a[0];
+    $chr_num =~ s/chr//;
+    if (($chrs{$a[0]} == 1) && (! defined $chrs{$chr_num})) {$chr_num=$a[0];}
+    system("samtools view -bu $title $chr_num\:$leftlower\-$leftupper $chr_num\:$rightlower\-$rightupper > temp.bam");
     system("samtools view -Xf 0x2 temp.bam > temp.sam");
     
     open in,"temp.sam";

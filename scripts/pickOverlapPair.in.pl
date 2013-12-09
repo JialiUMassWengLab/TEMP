@@ -81,6 +81,7 @@ while (my $line=<input>) {
 
     my $variant=$a[8]+$a[9]+$a[10]+$a[11];
     my $ratio=sprintf("%.4f", $variant/($variant+$ref_sup));
+    if ($a[0] =~ /^\d{1,3}$/) {$a[0]="chr$a[0]";}
     if ($reverse == 0) {
 	print "$a[0]\t$a[1]\t$a[2]\t$a[3]\t$a[4]\t$a[5]\t$variant\t$ratio\t$b[0]\t$a[8]\t$c[0]\t$a[9]\t$a[10]\t$a[11]\n";
     }

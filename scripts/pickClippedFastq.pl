@@ -34,8 +34,8 @@ while (my $line=<input>) {
     chomp($line);
     my @a=split(/\t/, $line);
 
-    my $lower=$a[1]-10;
-    my $upper=$a[2]+10;
+    my $lower=$a[1]-15;
+    my $upper=$a[2]+15;
     if (($lower > 0)&&($upper > 0))
     {
 	system("samtools view -hX $ARGV[0].pair.bam $a[0]\:$lower\-$upper > temp.sam");

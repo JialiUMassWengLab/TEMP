@@ -28,6 +28,7 @@ while(<in>)
                 my $aln_ln=sum(@cigar_m,@cigar_d);
 		
 #		print $f[2],"\t",$f[3]-1+$aln_ln,"\t",$f[3]+$f[8],"\t$f[0]/$rnum\t","\n";
+		if ($f[2] =~ /^\d{1,2}$/) {$f[2]="chr$f[2]";}
 		print $f[2],"\t",$f[3]-6+$aln_ln,"\t",$f[7]+5,"\t$f[0]/$rnum\t","\n";
 	}
 }

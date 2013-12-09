@@ -29,8 +29,8 @@ for my $i (0..$#a) {
 		    $d[0]=$d[1];
 		    $d[1]=$temp;
 		}
-		my $lower=$d[0]-10;
-		my $upper=$d[1]+10;
+		my $lower=$d[0];
+		my $upper=$d[1];
 		print output "$c[0]\t$lower\t$upper\t$b[0]\t$b[1]\t$b[3]\t$b[4]\t$b[5]\n";
 	    }
 	}

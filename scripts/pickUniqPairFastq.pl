@@ -25,14 +25,17 @@ while(<in>)
 		$f[9]=$seq->revcom->seq;
 		$f[10]=reverse $f[10];
 	}
-	${$pe{$f[0]}}[$rnum-1]=[$xt,$f[9],$f[10]];
+	if (($rnum == 1) || ($rnum == 2))
+	{
+	    ${$pe{$f[0]}}[$rnum-1]=[$xt,$f[9],$f[10]];
+	}
 }
 close in;
 
 foreach my $id (keys %pe)
 {
 	my @rid=@{$pe{$id}};
-	if($rid[0][0] eq "U" || $rid[1][0] eq "U")
+	if (($rid[0][0] ne "") && ($rid[1][0] ne "") && (($rid[0][0] eq "U" || $rid[1][0] eq "U")))
 	{
 		print m2 "@"."$id/2","\n",$rid[1][1],"\n","+$id/2","\n",$rid[1][2],"\n";
 		print m1 "@"."$id/1","\n",$rid[0][1],"\n","+$id/1","\n",$rid[0][2],"\n";

@@ -124,3 +124,14 @@ Column 6: Junctions at 3’ of the excised TE. The two numbers are the coordinat
 Column 7: The number of reads supporting the excision.
 Column 8: The number of reads supporting the reference (no excision).
 Column 9: Estimated population frequency of the detected excision event.
+
+
+
+
+Test datasets
+
+We put together two datasets for testing TEMP. 
+One is a simulated set generated using Drosophila Melanogaster Chromosome 2L as the template. It's distributed along with this package.
+The other one is derived from chromosome 11 of 8 individuals from 1000 gnomes project. It's available at http://zlab.umassmed.edu/~zhuangj/TEMP_test_dataset/.
+
+Th

@@ -18,7 +18,7 @@ while(<in>)
 	my $strand="+";
 
 	## parse CIGAR
-	if(($xt eq "U")&&($f[1]=~/R/)&&($f[8] > $ARGV[1])&&($f[8] <= 10000))
+	if(($f[1]=~/R/)&&($f[8] > $ARGV[1])&&($f[8] <= 10000))
         {
                 # CIGAR
                 my (@cigar_m)=$f[5]=~/(\d+)M/g;

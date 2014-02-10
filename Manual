@@ -4,7 +4,7 @@ TEMP (Transposable Element Movement in Population) Manual
 2013.12.09
 
 
-TEMP is a software designed to 1) detect transposable elements (TEs) insertions and excisions relative to the reference genome, 2) define the genome-TE junctions up to base pair resolution when it is possible, and 3) estimate the population frequency of the detected insertions and excisions. This document provides information concerning how to run TEMP, what options to use, and how to interpret the outputs. If you have any questions or find any bugs please contact Jiali Zhuang through jiali.zhuang@umassmed.edu. 
+TEMP is a software designed to 1) detect transposable elements (TEs) insertions and absences relative to the reference genome, 2) define the genome-TE junctions up to base pair resolution when it is possible, and 3) estimate the population frequency of the detected insertions and excisions. This document provides information concerning how to run TEMP, what options to use, and how to interpret the outputs. If you have any questions or find any bugs please contact Jiali Zhuang through jiali.zhuang@umassmed.edu. 
 
 
 
@@ -19,7 +19,7 @@ bwa (http://sourceforge.net/projects/bio-bwa/).
 Perl package BioPerl is also required for running TEMP (http://www.bioperl.org/wiki/Main_Page).
 
 For installing TEMP just unzip and untar the file. 
-In the directory TEMP_v1.01/ there are two bash scripts TEMP_Insertion.sh and TEMP_Excision.sh for TE insertion and excision analysis, respectively. 
+In the directory TEMP_v1.01/ there are two bash scripts TEMP_Insertion.sh and TEMP_Excision.sh for TE insertion and absence analysis, respectively. 
 
 
 

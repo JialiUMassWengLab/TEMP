@@ -4,7 +4,7 @@ TEMP (Transposable Element Movement in Population) Manual
 2013.12.09
 
 
-TEMP is a software designed to 1) detect transposable elements (TEs) insertions and absences relative to the reference genome, 2) define the genome-TE junctions up to base pair resolution when it is possible, and 3) estimate the population frequency of the detected insertions and excisions. This document provides information concerning how to run TEMP, what options to use, and how to interpret the outputs. If you have any questions or find any bugs please contact Jiali Zhuang through jiali.zhuang@umassmed.edu. 
+TEMP is a software designed to 1) detect transposable elements (TEs) insertions and absences relative to the reference genome, 2) define the genome-TE junctions up to base pair resolution when it is possible, and 3) estimate the population frequency of the detected insertions and absences. This document provides information concerning how to run TEMP, what options to use, and how to interpret the outputs. If you have any questions or find any bugs please contact Jiali Zhuang through jiali.zhuang@umassmed.edu. 
 
 
 
@@ -111,19 +111,19 @@ Column 13: The number of reads supporting the detected insertion at the 3’ end
 
 
 
-For TE excision analysis, the summay output file has the suffix: .absence.refined.bp.summary.
+For TE absence analysis, the summay output file has the suffix: .absence.refined.bp.summary.
 
 
 There are 9 columns in the summary file and their meanings are listed below:
-Column 1: The chromosome where the detected excision happens.
-Column 2: The coordinate of the start position of the detected excision.
-Column 3: The coordinate of the end position of the detected excision.
+Column 1: The chromosome where the detected absence happens.
+Column 2: The coordinate of the start position of the detected absence.
+Column 3: The coordinate of the end position of the detected absence.
 Column 4: The TE family that the detected insertion belongs to. 
 Column 5: Junctions at 5’ of the excised TE. The two numbers are the coordinates of the junctions on the two strands.
 Column 6: Junctions at 3’ of the excised TE. The two numbers are the coordinates of the junctions on the two strands. 
-Column 7: The number of reads supporting the excision.
-Column 8: The number of reads supporting the reference (no excision).
-Column 9: Estimated population frequency of the detected excision event.
+Column 7: The number of reads supporting the absence.
+Column 8: The number of reads supporting the reference (no absence).
+Column 9: Estimated population frequency of the detected absence event.
 
 
 

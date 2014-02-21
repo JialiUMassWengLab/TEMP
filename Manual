@@ -19,7 +19,7 @@ bwa (http://sourceforge.net/projects/bio-bwa/).
 Perl package BioPerl is also required for running TEMP (http://www.bioperl.org/wiki/Main_Page).
 
 For installing TEMP just unzip and untar the file. 
-In the directory TEMP_v1.01/ there are two bash scripts TEMP_Insertion.sh and TEMP_Excision.sh for TE insertion and absence analysis, respectively. 
+In the directory TEMP_v1.01/ there are two bash scripts TEMP_Insertion.sh and TEMP_Absence.sh for TE insertion and absence analysis, respectively. 
 
 
 

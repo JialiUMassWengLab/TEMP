@@ -10,6 +10,7 @@ foreach my $file (@files) {
     $count =~ s/.refined.bp//;
     $title =~ s/excision/absence/;
     $title =~ s/.cluster.rpmk//;
+    $title .= ".summary";
 	
     open (input, "<$file") or die "Can't open $file since $!\n";
     open (input1, "<$count") or die "Can't open $count since $!\n";

@@ -8,7 +8,8 @@ foreach my $file (@files) {
     my $count=$file;
     my $title=$file;
     $count =~ s/.refined.bp//;
-    $title =~ s/refined.bp/summary/;
+    $title =~ s/excision/absence/;
+    $title =~ s/.cluster.rpmk//;
 	
     open (input, "<$file") or die "Can't open $file since $!\n";
     open (input1, "<$count") or die "Can't open $count since $!\n";

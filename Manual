@@ -1,7 +1,7 @@
 TEMP (Transposable Element Movement in Population) Manual
 
 
-2013.12.09
+2014.03.26
 
 
 TEMP is a software designed to 1) detect transposable elements (TEs) insertions and absences relative to the reference genome, 2) define the genome-TE junctions up to base pair resolution when it is possible, and 3) estimate the population frequency of the detected insertions and absences. This document provides information concerning how to run TEMP, what options to use, and how to interpret the outputs. If you have any questions or find any bugs please contact Jiali Zhuang through jiali.zhuang@umassmed.edu. 

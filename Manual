@@ -144,6 +144,10 @@ bash ../scripts/TEMP_Absence.sh -i ./test_chromosome.sorted.bam -s ../scripts -r
 
 The other one is derived from chromosome 11 of 8 individuals from 1000 gnomes project. It's available at http://zlab.umassmed.edu/~zhuangj/TEMP_resources/Human_test_dataset.tar.gz.
 The recommended commandline invokation for this testset is:
-cd /your/path/to/test_dataset
-TEMP_Insertion.sh -i ./chrom11.test.sorted.bam -s your/path/to/TEMP_v1.01/scripts -r ./HomoSapienRepbaseTEConcensus.fa -t ./hg19_rpmk.bed -m 3 -f 500 -c 8
-TEMP_Absence.sh -i ./chrom11.test.sorted.bam -s your/path/to/TEMP_v1.01/scripts -r ./hg19_rpmk.bed -t ./hg19.2bit -f 500 -c 4
+git clone https://github.com/JialiUMassWengLab/TEMP.git
+cd TEMP
+wget http://zlab.umassmed.edu/~zhuangj/TEMP_resources/Human_test_dataset.tar.gz
+tar -zxvf Human_test_dataset.tar.gz
+cd Human_test_dataset
+bash ../scripts/TEMP_Insertion.sh ./chrom11.test.sorted.bam -s ../scripts -r ./HomoSapienRepbaseTEConcensus.fa -t ./hg19_rpmk.bed -m 3 -f 500 -c 8
+bash ../scripts/TEMP_Absence.sh -i ./chrom11.test.sorted.bam -s ../scripts -r ./hg19_rpmk.bed -t ./hg19.2bit -f 500 -c 4

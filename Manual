@@ -1,7 +1,7 @@
 TEMP (Transposable Element Movement in Population) Manual
 
 
-2014.03.26
+2014.05.14
 
 
 TEMP is a software designed to 1) detect transposable elements (TEs) insertions and absences relative to the reference genome, 2) define the genome-TE junctions up to base pair resolution when it is possible, and 3) estimate the population frequency of the detected insertions and absences. This document provides information concerning how to run TEMP, what options to use, and how to interpret the outputs. If you have any questions or find any bugs please contact Jiali Zhuang through jiali.zhuang@umassmed.edu. 
@@ -146,7 +146,7 @@ The other one is derived from chromosome 11 of 8 individuals from 1000 gnomes pr
 The recommended commandline invokation for this testset is:
 git clone https://github.com/JialiUMassWengLab/TEMP.git
 cd TEMP
-wget http://zlab.umassmed.edu/~zhuangj/TEMP_resources/Human_test_dataset.tar.gz
+wget http://bib.umassmed.edu/~zhuangj/TEMP_resources/Human_test_dataset.tar.gz
 tar -zxvf Human_test_dataset.tar.gz
 cd Human_test_dataset
 bash ../scripts/TEMP_Insertion.sh ./chrom11.test.sorted.bam -s ../scripts -r ./HomoSapienRepbaseTEConcensus.fa -t ./hg19_rpmk.bed -m 3 -f 500 -c 8

@@ -14,7 +14,7 @@ while (my $line=<input>) {
     if ($line =~ /^\>/) {
 	if ($curr_transposon ne "") {
 	    $transposon_seq{$curr_transposon}=uc($curr_seq);
-	    my $seq=Bio::Seq->new(-seq=>$curr_seq);
+	    my $seq=Bio::Seq->new(-seq=>$curr_seq, -alphabet => 'dna');
 	    $curr_seq=$seq->revcom->seq;
 	    $transposon_revcom_seq{$curr_transposon}=uc($curr_seq);
 	}

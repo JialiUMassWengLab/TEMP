@@ -4,7 +4,8 @@ TEMP (Transposable Element Movement in Population) Manual
 2014.05.14
 
 
-TEMP is a software designed to 1) detect transposable elements (TEs) insertions and absences relative to the reference genome, 2) define the genome-TE junctions up to base pair resolution when it is possible, and 3) estimate the population frequency of the detected insertions and absences. This document provides information concerning how to run TEMP, what options to use, and how to interpret the outputs. If you have any questions or find any bugs please contact Jiali Zhuang through jiali.zhuang@umassmed.edu. 
+TEMP is a software designed to 1) detect transposable elements (TEs) insertions and absences relative to the reference genome, 2) define the genome-TE junctions up to base pair resolution when it is possible, and 3) estimate the population frequency of the detected insertions and absences. 
+This document provides information concerning how to run TEMP, what options to use, and how to interpret the outputs. If you have any questions or find any bugs please contact Jiali Zhuang through jiali.zhuang@umassmed.edu. 
 
 
 
@@ -149,5 +150,5 @@ cd TEMP
 wget http://bib.umassmed.edu/~zhuangj/TEMP_resources/Human_test_dataset.tar.gz
 tar -zxvf Human_test_dataset.tar.gz
 cd Human_test_dataset
-bash ../scripts/TEMP_Insertion.sh ./chrom11.test.sorted.bam -s ../scripts -r ./HomoSapienRepbaseTEConcensus.fa -t ./hg19_rpmk.bed -m 3 -f 500 -c 8
+bash ../scripts/TEMP_Insertion.sh -i ./chrom11.test.sorted.bam -s ../scripts -r ./HomoSapienRepbaseTEConcensus.fa -t ./hg19_rpmk.bed -m 3 -f 500 -c 8
 bash ../scripts/TEMP_Absence.sh -i ./chrom11.test.sorted.bam -s ../scripts -r ./hg19_rpmk.bed -t ./hg19.2bit -f 500 -c 4

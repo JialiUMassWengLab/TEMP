@@ -1,7 +1,7 @@
 TEMP (Transposable Element Movement in Population) Manual
 
 
-2014.05.14
+2014.05.24
 
 
 TEMP is a software designed to 1) detect transposable elements (TEs) insertions and absences relative to the reference genome, 2) define the genome-TE junctions up to base pair resolution when it is possible, and 3) estimate the population frequency of the detected insertions and absences. 
@@ -139,8 +139,8 @@ The procedure involves two steps:
 This can be done easily by running the script "generate_density_json.pl": e.g.
 perl generate_density_json.pl input.insertion.bp.summary ref.chromInfo 500000
 
-This script takes 3 parameters: (1) the TE insertions predicted by TEMP (i.e., the output produced by TEMP_Insertion.sh);
-                                (2) the file contains the sizes for all the chromosomes in a reference genome (the chromInfo files for model organism genomes can be downloaded from UCSC Genome Browser);
+This script takes 3 parameters: (1) the TE insertions predicted by TEMP (i.e., the output file produced by TEMP_Insertion.sh);
+                                (2) the file contains the sizes of all the chromosomes in a reference genome (the chromInfo files for model organism genomes can be downloaded from UCSC Genome Browser);
                                 (3) the size of genomic bins (500kb in the above example), total number predicted TE insertions in each will be calculated and plotted later.
                                 
 2) Visualization of the distribution of TE insertions across the genome.

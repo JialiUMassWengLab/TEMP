@@ -16,7 +16,8 @@ TEMP runs on Linux x86_64 systems.
 Following softwares are required by TEMP and should be included in the path:
 Samtools (http://samtools.sourceforge.net/),
 bedtools (http://code.google.com/p/bedtools/),
-bwa (http://sourceforge.net/projects/bio-bwa/).
+bwa (http://sourceforge.net/projects/bio-bwa/),
+twoBitToFa (http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/twoBitToFa),
 Perl package BioPerl is also required for running TEMP (http://www.bioperl.org/wiki/Main_Page).
 
 For installing TEMP just unzip and untar the file. 

@@ -129,6 +129,31 @@ Column 9: Estimated population frequency of the detected absence event.
 
 
 
+
+Visualization
+
+Since v1.01, we added a new function to TEMP that enables the visualization of the distribution of predicted TE insertion across the genome using Dr. Xiaopeng Zhu's visualization tool.
+
+The procedure involves two steps:
+1) Generate the JSON objects file from the TEMP detected TE insertions. 
+This can be done easily by running the script "generate_density_json.pl": e.g.
+perl generate_density_json.pl input.insertion.bp.summary ref.chromInfo 500000
+
+This script takes 3 parameters: (1) the TE insertions predicted by TEMP (i.e., the output produced by TEMP_Insertion.sh);
+                                (2) the file contains the sizes for all the chromosomes in a reference genome (the chromInfo files for model organism genomes can be downloaded from UCSC Genome Browser);
+                                (3) the size of genomic bins (500kb in the above example), total number predicted TE insertions in each will be calculated and plotted later.
+                                
+2) Visualization of the distribution of TE insertions across the genome.
+Dr. Xiaopeng Zhu at UMass Medical School developed a powserful web-based visualization tool that is available at: http://circos.zhu.land/
+The user only needs to upload the JSON file generated in step1 in the "read local file" section. 
+
+Please forward any question and suggestion about the website to Dr. Zhu: xiaopeng.zhu@umassmed.edu
+
+
+
+
+
+
 Test datasets
 
 We put together two datasets for testing TEMP. 

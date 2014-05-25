@@ -1,6 +1,7 @@
 #! /usr/bin/perl                                                                                                                                                                                  
 
 use strict;
+die "perl $0 <input.insertion.bp.summary> <chromInfo file> <genomic bin size>\n" if @ARGV<2;
 
 my @colors=("blue","green","red","yellow","grey","orange","purple","black");
 

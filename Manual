@@ -1,7 +1,7 @@
 TEMP (Transposable Element Movement in Population) Manual
 
 
-2014.05.24
+2014.05.28
 
 
 TEMP is a software designed to 1) detect transposable elements (TEs) insertions and absences relative to the reference genome, 2) define the genome-TE junctions up to base pair resolution when it is possible, and 3) estimate the population frequency of the detected insertions and absences. 
@@ -133,7 +133,7 @@ Column 9: Estimated population frequency of the detected absence event.
 
 Visualization
 
-Since v1.01, we added a new function to TEMP that enables the visualization of the distribution of predicted TE insertion across the genome using Dr. Xiaopeng Zhu's visualization tool.
+Since v1.01, we added a new function to TEMP that enables the visualization of the distribution of predicted TE insertion across the genome using Dr. Xiaopeng Zhu's visualization tool "circosjs".
 
 The procedure involves two steps:
 1) Generate the JSON objects file from the TEMP detected TE insertions. 
@@ -145,7 +145,7 @@ This script takes 3 parameters: (1) the TE insertions predicted by TEMP (i.e., t
                                 (3) the size of genomic bins (500kb in the above example), total number predicted TE insertions in each will be calculated and plotted later.
                                 
 2) Visualization of the distribution of TE insertions across the genome.
-Dr. Xiaopeng Zhu at UMass Medical School developed a powserful web-based visualization tool that is available at: http://circos.zhu.land/
+Dr. Xiaopeng Zhu (https://twitter.com/nimezhu) at UMass Medical School developed a powserful web-based visualization tool that is available at: http://circos.zhu.land/
 The user only needs to upload the JSON file generated in step1 in the "read local file" section. 
 
 Please forward any question and suggestion about the website to Dr. Zhu: xiaopeng.zhu@umassmed.edu

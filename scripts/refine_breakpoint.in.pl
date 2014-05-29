@@ -45,21 +45,17 @@ for my $file (@files) {
 	    }
 	}
 
-	if ((($a[0] =~ /^chr/) || ($a[0] =~ /^\d{1,2}$/) || ($a[0] eq "X") || ($a[0] eq "Y")) && ($a[1] > 0)) {
+        if ($a[1] > 0) {
 	    $a[1] += 15;
 	    $a[2] -= 15;
 	    print output "$a[0]\t$a[1]\t$a[2]\t$a[3]\t$strand\t$class\t";
 	    if (($minus >= 1)&&($plus >= 1)&&(abs($plusmax-$minusmax) <= 25)) {
-#		$psup += $minus;
-#		$msup += $plus;
 		print output "$plusmax\(\+\)\t$minusmax\(\-\)\t$plus\t$minus\t";
 	    }
 	    elsif (($plus >= $minus)&&($plus >= 2)&&($plusmax >= $a[1])&&($plusmax <= $a[2])) {
-#		$msup += $plus;
 		print output "$plusmax\(\+\)\t$plusmax\(\-\)\t$plus\t0\t";
 	    }
 	    elsif (($minus >= 2)&&($minusmax >= $a[1])&&($minusmax <= $a[2])) {
-#		$psup += $minus;
 		print output "$minusmax\(\+\)\t$minusmax\(\-\)\t0\t$minus\t";
 	    }
 	    else {

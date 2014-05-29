@@ -24,7 +24,7 @@ Options:
         -s     Directory where all the scripts are
         -o     Path to output directory. Default is current directory
         -r     Transposon sequence database in fasta format with full path
-        -t     Annotated TEs in BED6 format with full path. Detectied snsertions that overlap with annoated TEs will be filtered. 
+        -t     Annotated TEs in BED6 format with full path. Detected insertions that overlap with annoated TEs will be filtered. 
         -m     Number of mismatch allowed when mapping to TE concensus sequences
         -f     An integer specifying the length of the fragments (inserts) of the library. Default is 500
         -c     An integer specifying the number of CUPs used. Default is 8

@@ -71,7 +71,7 @@ do
         esac
 done
 
-if [[ -z $BAM ]] || [[ -z $BINDIR ]] || [[ -z $TESEQ ]] || [[ -z $ANNO ]]
+if [[ -z $BAM ]] || [[ -z $BINDIR ]] || [[ -z $TESEQ ]]
 then
         usage && exit 1
 fi
@@ -132,14 +132,6 @@ samtools view -hSXF 0x2 $i.unpair.uniq.transposons.sam > $i.unpair.uniq.transpos
 perl $BINDIR/pickUniqMate.pl $i.unpair.uniq.transposons.unpair.sam $i.unpair.uniq.bed > $i.unpair.uniq.transposons.bed
 cp $i.unpair.uniq.transposons.bed $i.unpair.uniq.transposons.filtered.bed
 
-# Throw out false positives (TEs that overlap with annotated TEs)
-#perl $BINDIR/filterFalsePositive.in.pl $i.unpair.uniq.transposons.bed $ANNO > $i.unpair.uniq.transposons.fp.bed
-#if [[ -s $i.unpair.uniq.transposons.fp.bed ]]
-#then
-#    bedtools subtract -a $i.unpair.uniq.transposons.bed -b $i.unpair.uniq.transposons.fp.bed -f 1.0 > $i.unpair.uniq.transposons.filtered.bed
-#else 
-#    cp $i.unpair.uniq.transposons.bed $i.unpair.uniq.transposons.filtered.bed
-#fi
 
 #Prepare for insertion breakpoints identification
 awk -F "\t" -v sample=$i '{OFS="\t"; print $1,$2,$3,sample,$5,$6}' $i.unpair.uniq.transposons.filtered.bed >> tmp
@@ -165,17 +157,20 @@ perl $BINDIR/pickOverlapPair.in.pl $i.insertion.refined.bp $INSERT > $i.insertio
 
 
 #Remove called sites that overlap with annotated TEs
-awk -F "\t" '{OFS="\t"; if ($5=="antisense") $5="-"; if ($5=="sense") $5="+"; if ($1 ~ /^chr/) print $1,$2,$3,$4,".",$5}' $i.insertion.refined.bp.summary > tmp
-bedtools intersect -a tmp -b $ANNO -f 0.1 -wo -s > tmp1
-awk -F "\t" '{OFS="\t"; if (($4==$10)&&($6==$12)) print $1,$2,$3,$4,$5,$6}' tmp1 > tmp2
-if [[ -s "tmp2" ]]
+if [[ ! -z $ANNO ]]
 then
-    awk -F "\t" '{OFS="\t"; if ($1 ~ /^chr/) print}' $i.insertion.refined.bp.summary > tmp1
-    bedtools subtract -a tmp1 -b tmp2 -f 1.0 > tmp3
-    head -n 1 $i.insertion.refined.bp.summary > tmp4
-    cat tmp4 tmp3 > $i.insertion.refined.bp.summary
+    awk -F "\t" '{OFS="\t"; if ($5=="antisense") $5="-"; if ($5=="sense") $5="+"; if ($1 !~ /^Chr/) print $1,$2,$3,$4,".",$5}' $i.insertion.refined.bp.summary > tmp
+    bedtools intersect -a tmp -b $ANNO -f 0.1 -wo -s > tmp1
+    awk -F "\t" '{OFS="\t"; if (($4==$10)&&($6==$12)) print $1,$2,$3,$4,$5,$6}' tmp1 > tmp2
+    if [[ -s "tmp2" ]]
+    then
+    	awk -F "\t" '{OFS="\t"; if ($1 !~ /^Chr/) print}' $i.insertion.refined.bp.summary > tmp1
+    	bedtools subtract -a tmp1 -b tmp2 -f 1.0 > tmp3
+    	head -n 1 $i.insertion.refined.bp.summary > tmp4
+    	cat tmp4 tmp3 > $i.insertion.refined.bp.summary
+    fi
+    rm tmp*
 fi
-rm tmp*
 
 ################################
 ##End of processing insertions##

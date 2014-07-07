@@ -3,7 +3,7 @@
 use strict;
 die "perl $0 <input.insertion.bp.summary> <chromInfo file> <genomic bin size>\n" if @ARGV<2;
 
-my @colors=("blue","green","red","yellow","grey","orange","purple","black");
+my @colors=("blue","green","red","yellow","grey","orange","purple","brown", "black");
 
 my $op_title=$ARGV[0];
 $op_title =~ s/summary/json/;
@@ -33,14 +33,15 @@ while (my $line=<input>) {
             next;
         }
         if ($i > 0) {print output ",\n";}
-        print output "{\"id\":\"$a[0]\",\"length\":$len,\"color\":\"$colors[$i % 7]\"}";
+        print output "{\"id\":\"$a[0]\",\"length\":$len,\"color\":\"$colors[$i % 9]\"}";
         $i++;
     }
 }
 close input;
 
-print output "\n],\n\"plottracks\":[\n{\n";
+print output "\n],\n\"tracks\":[\n{\n";
 print output "\"name\": \"Density\",\n";
+print output "\"type\": \"plot\",\n";
 print output "\"values\":\n[\n";
 
 my @hist=();
@@ -63,7 +64,7 @@ while (my $line=<input>) {
     else {
         if (($last_chr ne "") && ($chrs{$last_chr} == 1)) {
             if ($k > 0) {print output ",\n";}
-            print output "{\"color\":\"$colors[$k % 7]\",\"chr\":\"$last_chr\",\"values\":[";
+            print output "{\"color\":\"$colors[$k % 9]\",\"chr\":\"$last_chr\",\"values\":[";
             for my $j (0..$i-1) {print output "$hist[$j],";}
             print output "$hist[$i]]}";
             $k++;

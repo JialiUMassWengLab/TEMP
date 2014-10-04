@@ -29,8 +29,7 @@ while (my $line=<input>) {
     }
     my $lower=$b[0]-$frag;
     my $upper=$c[0]+$frag;
-    system("samtools view -bu $title $a[0]\:$lower\-$upper > temp.bam");
-    system("samtools view -Xf 0x2 temp.bam > temp.sam");
+    system("samtools view -Xf 0x2 $title $a[0]\:$lower\-$upper > temp.sam");
     
     open in,"temp.sam";
     my %ps=();
@@ -88,6 +87,6 @@ while (my $line=<input>) {
     elsif ($reverse == 1) {
 	print "$a[0]\t$a[1]\t$a[2]\t$a[3]\t$a[4]\t$a[5]\t$variant\t$ratio\t$b[0]\t$a[9]\t$c[0]\t$a[8]\t$a[10]\t$a[11]\n";
     }
-    system("rm temp.sam temp.bam");
+    system("rm temp.sam");
 }
 

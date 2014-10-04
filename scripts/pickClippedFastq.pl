@@ -38,7 +38,7 @@ while (my $line=<input>) {
     my $upper=$a[2]+15;
     if (($lower > 0)&&($upper > 0))
     {
-	system("samtools view -hX $ARGV[0].pair.bam $a[0]\:$lower\-$upper > temp.sam");
+	system("samtools view -hXf 0x2 $ARGV[0].sorted.bam $a[0]\:$lower\-$upper > temp.sam");
 	
 	open in,"temp.sam";
 	my %pe1;

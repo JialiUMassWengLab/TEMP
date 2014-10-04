@@ -26,7 +26,7 @@ Options:
         -r     Transposon sequence database in fasta format with full path
         -t     Annotated TEs in BED6 format with full path. Detected insertions that overlap with annoated TEs will be filtered. 
         -u     TE families annotations. If supplied detected insertions overlap with annotated TE of the same family will be filtered. Only use with -t.                 
-        -m     Number of mismatch allowed when mapping to TE concensus sequences
+        -m     Number of mismatch allowed when mapping to TE concensus sequences. Default is 3
         -f     An integer specifying the length of the fragments (inserts) of the library. Default is 500
         -c     An integer specifying the number of CUPs used. Default is 8
         -h     Show help message
@@ -125,11 +125,13 @@ samtools view -XF 0x2  $name > $i.unpair.sam
 perl $BINDIR/pickUniqPairFastq.pl $i.unpair.sam $i.unpair.uniq
 perl $BINDIR/pickUniqPos.pl $i.unpair.sam > $i.unpair.uniq.bed
 
+
 # Map to transposons
 bwa index -a is $te
 bwa aln -t $CPU -n $MM -l 100 -R 1000 $te $i.unpair.uniq.1.fastq > $i.unpair.uniq.1.sai
 bwa aln -t $CPU -n $MM -l 100 -R 1000 $te $i.unpair.uniq.2.fastq > $i.unpair.uniq.2.sai
 bwa sampe -P $te $i.unpair.uniq.1.sai $i.unpair.uniq.2.sai $i.unpair.uniq.1.fastq $i.unpair.uniq.2.fastq > $i.unpair.uniq.transposons.sam
+
 
 #Summary
 samtools view -hSXF 0x2 $i.unpair.uniq.transposons.sam > $i.unpair.uniq.transposons.unpair.sam
@@ -143,44 +145,20 @@ perl $BINDIR/mergeTagsWithoutGap.pl tmp > $i.uniq.transposons.filtered.woGap.bed
 perl $BINDIR/mergeTagsWithGap.pl $i.uniq.transposons.filtered.woGap.bed $INSERT > $i.uniq.transposons.filtered.wGap.bed
 rm tmp
 perl $BINDIR/get_class.pl $i.uniq.transposons.filtered.wGap.bed $i > $i.uniq.transposons.filtered.wGap.class.bed
-perl $BINDIR/make.bp.bed.pl $i.uniq.transposons.filtered.wGap.class.bed
+perl $BINDIR/make.bp.bed.pl $i.uniq.transposons.filtered.wGap.class.bed $ANNO $FAMI
 
 rm $i.unpair.sam $i.unpair.uniq.bed $i.unpair.uniq.?.fastq $i.unpair.uniq.?.sai 
 rm $i.unpair.uniq.transposons.sam $i.unpair.uniq.transposons.unpair.sam $i.uniq.transposons.filtered.woGap.bed $i.uniq.transposons.filtered.wGap.bed
 
+
 #Detect insertion breakpoints using soft-clipping information
-samtools view -bf 0x2 $name > $i.pair.bam
-samtools index $i.pair.bam
 perl $BINDIR/pickClippedFastq.pl $i $te
 perl $BINDIR/refine_breakpoint.in.pl
 
-rm $i.pair.bam $i.pair.bam.bai
 
 #Estimate insertion frequencies
 perl $BINDIR/pickOverlapPair.in.pl $i.insertion.refined.bp $INSERT > $i.insertion.refined.bp.summary
 
-
-#Remove called sites that overlap with annotated TEs
-if [[ ! -z $ANNO ]]
-then
-    awk -F "\t" '{OFS="\t"; if ($5=="antisense") $5="-"; if ($5=="sense") $5="+"; if ($1 !~ /^Chr/) print $1,$2,$3,$4,".",$5}' $i.insertion.refined.bp.summary > tmp
-    bedtools intersect -a tmp -b $ANNO -f 0.1 -wo -s > tmp1
-    if [[ -z $FAMI ]]
-    then
-	awk -F "\t" '{OFS="\t"; if (($4==$10)&&($6==$12)) print $1,$2,$3,$4,$5,$6}' tmp1 > tmp2
-    else
-        perl $BINDIR/filterByFamily.pl $FAMI
-    fi
-
-    if [[ -s "tmp2" ]]
-    then
-    	awk -F "\t" '{OFS="\t"; if ($1 !~ /^Chr/) print}' $i.insertion.refined.bp.summary > tmp1
-    	bedtools subtract -a tmp1 -b tmp2 -f 1.0 > tmp3
-    	head -n 1 $i.insertion.refined.bp.summary > tmp4
-    	cat tmp4 tmp3 > $i.insertion.refined.bp.summary
-    fi
-    rm tmp*
-fi
 
 ################################
 ##End of processing insertions##

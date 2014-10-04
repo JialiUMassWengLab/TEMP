@@ -56,8 +56,7 @@ while (my $line=<input>) {
     my $chr_num=$a[0];
     $chr_num =~ s/chr//;
     if (($chrs{$a[0]} == 1) && (! defined $chrs{$chr_num})) {$chr_num=$a[0];}
-    system("samtools view -bu $title $chr_num\:$leftlower\-$leftupper $chr_num\:$rightlower\-$rightupper > temp.bam");
-    system("samtools view -Xf 0x2 temp.bam > temp.sam");
+    system("samtools view -Xf 0x2 $title $chr_num\:$leftlower\-$leftupper $chr_num\:$rightlower\-$rightupper > temp.sam");
     
     open in,"temp.sam";
     my %ps=();
@@ -116,6 +115,6 @@ while (my $line=<input>) {
     }
 
     print "$a[0]\t$a[1]\t$a[2]\t$a[3]\t$left\t$right\t$ref_sup\n";
-    system("rm temp.sam temp.bam");
+    system("rm temp.sam");
 }
 

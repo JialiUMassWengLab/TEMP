@@ -33,7 +33,9 @@ for my $i (0..$#a) {
 		}
 		my $lower=$d[0];
 		my $upper=$d[1];
-		print output "$c[0]\t$lower\t$upper\t$b[0]\t$b[1]\t$b[3]\t$b[4]\t$b[5]\n";
+	        if (($lower >= 0) && ($upper >= 0)) {
+		   print output "$c[0]\t$lower\t$upper\t$b[0]\t$b[1]\t$b[3]\t$b[4]\t$b[5]\n";
+	        }
 		$chrs{$c[0]}=1;
 	    }
 	}

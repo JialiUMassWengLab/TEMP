@@ -74,7 +74,7 @@ while (my $line=<input>) {
 		    
 		    my (@clipped)=$z[1]=~/(\d+)S/g;
 		    my $cliplen=sum(@clipped);
-		    if ($cliplen >= 7) {
+		    if ($cliplen >= 15) {
 			$clipseq=substr($f[9], length($f[9])-$cliplen, $cliplen);
 		    }
 		}
@@ -85,7 +85,7 @@ while (my $line=<input>) {
 
                     my (@clipped)=$z[0]=~/(\d+)S/g;
                     my $cliplen=sum(@clipped);
-                    if ($cliplen >= 7) {
+                    if ($cliplen >= 15) {
                         $clipseq=substr($f[9], 0, $cliplen);
 		    }
 		}
@@ -97,7 +97,7 @@ while (my $line=<input>) {
 			if ($a[4] eq "antisense") {
 			    $seq=$transposon_revcom_seq{$key};
 			}
-			if (($seq =~ /$clipseq/)&&($a[3] eq $key)) {
+			if (($seq =~ /$clipseq/)&&($a[3] eq $key)&&($coor >= $lower)&&($coor <= $upper)) {
 #			    print "$clipseq\n";
 			    $final=$coor."\($strand\)";
 			    if (defined $pe1{$final}) {
@@ -144,7 +144,7 @@ while (my $line=<input>) {
 
                     my (@clipped)=$z[1]=~/(\d+)S/g;
                     my $cliplen=sum(@clipped);
-                    if ($cliplen >= 4) {
+                    if ($cliplen >= 6) {
                         $clipseq=substr($f[9], length($f[9])-$cliplen, $cliplen);
                     }
                 }
@@ -155,7 +155,7 @@ while (my $line=<input>) {
 
                     my (@clipped)=$z[0]=~/(\d+)S/g;
                     my $cliplen=sum(@clipped);
-                    if ($cliplen >= 4) {
+                    if ($cliplen >= 6) {
                         $clipseq=substr($f[9], 0, $cliplen);
                     }
                 }

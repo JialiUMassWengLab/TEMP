@@ -25,8 +25,9 @@ Options:
         -o     Path to output directory. Default is current directory
         -r     Transposon sequence database in fasta format with full path
         -t     Annotated TEs in BED6 format with full path. Detected insertions that overlap with annoated TEs will be filtered. 
-        -u     TE families annotations. If supplied detected insertions overlap with annotated TE of the same family will be filtered. Only use with -t.                 
+        -u     TE families annotations. If supplied detected insertions overlap with annotated TE of the same family will be filtered. Only use with -t.
         -m     Number of mismatch allowed when mapping to TE concensus sequences. Default is 3
+        -x     The minimum score difference between the best hit and the second best hit for considering a read as uniquely mapped. For BWA mem. 
         -f     An integer specifying the length of the fragments (inserts) of the library. Default is 500
         -c     An integer specifying the number of CUPs used. Default is 8
         -h     Show help message
@@ -36,7 +37,7 @@ echo -en "\e[0m"
 }
 
 # taking options
-while getopts "hi:c:f:m:o:r:s:t:u:" OPTION
+while getopts "hi:c:f:m:o:r:s:t:u:x:" OPTION
 do
         case $OPTION in
                 h)
@@ -69,6 +70,9 @@ do
                 u)
                         FAMI=$OPTARG
                 ;;
+	        x)
+		        SCORE=$OPTARG
+		;;
                 ?)
                         usage && exit 1
                 ;;
@@ -82,6 +86,7 @@ fi
 [ ! -z "${CPU##*[!0-9]*}" ] || CPU=8
 [ ! -z "${INSERT##*[!0-9]*}" ] || INSERT=500
 [ ! -z "${MM##*[!0-9]*}" ] || MM=3
+[ ! -z "${SCORE##*[!0-9]*}" ] || SCORE=0
 [ ! -z $OUTDIR ]  || OUTDIR=$PWD
 
 mkdir -p "${OUTDIR}" || echo -e "\e[1;31mWarning: Cannot create directory ${OUTDIR}. Using the direcory of input fastq file\e[0m"
@@ -122,9 +127,14 @@ fi
 
 # Get the mate seq of the uniq-unpaired reads
 samtools view -XF 0x2  $name > $i.unpair.sam
-perl $BINDIR/pickUniqPairFastq.pl $i.unpair.sam $i.unpair.uniq
-perl $BINDIR/pickUniqPos.pl $i.unpair.sam > $i.unpair.uniq.bed
-
+if [[ $SCORE -eq 0 ]]
+then
+    perl $BINDIR/pickUniqPairFastq.pl $i.unpair.sam $i.unpair.uniq
+    perl $BINDIR/pickUniqPos.pl $i.unpair.sam > $i.unpair.uniq.bed
+else
+    perl $BINDIR/pickUniqPairFastq_MEM.pl $i.unpair.sam $i.unpair.uniq $SCORE
+    perl $BINDIR/pickUniqPos_MEM.pl $i.unpair.sam $SCORE > $i.unpair.uniq.bed 
+fi
 
 # Map to transposons
 bwa index -a is $te
@@ -147,7 +157,7 @@ rm tmp
 perl $BINDIR/get_class.pl $i.uniq.transposons.filtered.wGap.bed $i > $i.uniq.transposons.filtered.wGap.class.bed
 perl $BINDIR/make.bp.bed.pl $i.uniq.transposons.filtered.wGap.class.bed $ANNO $FAMI
 
-rm $i.unpair.sam $i.unpair.uniq.bed $i.unpair.uniq.?.fastq $i.unpair.uniq.?.sai 
+#rm $i.unpair.sam $i.unpair.uniq.bed $i.unpair.uniq.?.fastq $i.unpair.uniq.?.sai 
 rm $i.unpair.uniq.transposons.sam $i.unpair.uniq.transposons.unpair.sam $i.uniq.transposons.filtered.woGap.bed $i.uniq.transposons.filtered.wGap.bed
 
 

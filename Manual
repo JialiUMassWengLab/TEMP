@@ -1,7 +1,7 @@
 TEMP (Transposable Element Movement in Population) Manual
 
 
-2014.07.10
+2015.01.09
 
 
 TEMP is a software designed to 1) detect transposable elements (TEs) insertions and absences relative to the reference genome, 2) define the genome-TE junctions up to base pair resolution when it is possible, and 3) estimate the population frequency of the detected insertions and absences. 
@@ -50,6 +50,9 @@ For TEMP_Insertion.sh the arguments to the options are explained below:
        -u    Families of transposable elements in tab delimited format (with the first column the name of the elemenet and the second column family). Only use together with -t. 
 
 
+       -x    The minimum score difference between the best hit and the second best hit for considering a read as uniquely mapped. The higher the score the more strigent the criterion. For BWA mem, which does not produce the XT:A: tag.
+       
+       
        -m    Number of mismatches allowed when mapping to TE concensus sequences.
 
 

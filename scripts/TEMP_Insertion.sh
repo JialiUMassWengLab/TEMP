@@ -29,7 +29,7 @@ Options:
         -m     Number of mismatch allowed when mapping to TE concensus sequences. Default is 3
         -x     The minimum score difference between the best hit and the second best hit for considering a read as uniquely mapped. For BWA mem. 
         -f     An integer specifying the length of the fragments (inserts) of the library. Default is 500
-        -c     An integer specifying the number of CUPs used. Default is 8
+        -c     An integer specifying the number of CPUs used. Default is 8
         -h     Show help message
 
 EOF

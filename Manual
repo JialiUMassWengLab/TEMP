@@ -59,7 +59,7 @@ For TEMP_Insertion.sh the arguments to the options are explained below:
        -f    An integer specifying the length of the fragments (inserts) of the library. Default is 500.
 
 
-       -c    An integer specifying the number of CUPs used. Default is 8.
+       -c    An integer specifying the number of CPUs used. Default is 8.
 
 
        -h    Show help message.

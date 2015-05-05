@@ -26,7 +26,7 @@ Options:
         -r     Annotated transposon positions in the genome (e.g., repeakMask) in bed6 format with full path
         -t     2bit file for the reference genome (can be downloaded from UCSC Genome Browser)
         -f     An integer specifying the length of the fragments (inserts) of the library. Default is 500
-        -c     An integer specifying the number of CUPs used. Default is 4
+        -c     An integer specifying the number of CPUs used. Default is 4
         -h     Show help message
 
 EOF

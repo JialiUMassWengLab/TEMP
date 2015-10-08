@@ -27,7 +27,7 @@ while(<in>)
                 $xs=$a[$i];
             }
             if (($xs > 0) && ($as-$xs <= $ARGV[1])) {$xt="R";}
-            else {$xt="U";}
+            elsif ($as > 0) {$xt="U";}
         }
 
 	my $strand="+";

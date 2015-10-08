@@ -30,7 +30,7 @@ while(<in>)
 		$xs=$a[$i];
 	    }
 	    if (($xs > 0) && ($as-$xs <= $ARGV[2])) {$xt="R";}
-	    else {$xt="U";}
+	    elsif ($as > 0) {$xt="U";}
 	}
 
 	## revcom the read mapped to the reverse strand

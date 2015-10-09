@@ -50,7 +50,7 @@ For TEMP_Insertion.sh the arguments to the options are explained below:
        -u    Families of transposable elements in tab delimited format (with the first column the name of the elemenet and the second column family). Only use together with -t. 
 
 
-       -x    The minimum score difference between the best hit and the second best hit for considering a read as uniquely mapped. The higher the score the more strigent the criterion. For BWA mem, which does not produce the XT:A: tag.
+       -x    The minimum score difference between the best hit and the second best hit for considering a read as uniquely mapped. The higher the score the more strigent the criterion. For BWA MEM, which does not produce the XT:A: tag.
        
        
        -m    Number of mismatches allowed when mapping to TE concensus sequences.
@@ -85,6 +85,9 @@ For TEMP_Absence.sh the arguments to the options are explained below:
        -t    2bit file for the reference genome. Such file can be downloaded from UCSC Genome Browser. In Downloads page choose the right genome, click on the “Full data set” link and download the *.2bit file.  
 
 
+       -x    The minimum score difference between the best hit and the second best hit for considering a read as uniquely mapped. The higher the score the more strigent the criterion. For BWA MEM, which does not produce the XT:A: tag.
+       
+       
        -f    An integer specifying the length of the fragments (inserts) of the library. Default is 500.
 
 

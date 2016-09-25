@@ -51,7 +51,10 @@ while(<in>)
 
 	if ($mm > 5) {next;}
 
-	my ($rnum)=$f[1]=~/(\d)$/;
+	#my ($rnum)=$f[1]=~/(\d)$/;
+        my $rnum=1;
+        if (($f[1] & 128) == 128) {$rnum=2;}
+
 	# CIGAR
 	my (@cigar_m)=$f[5]=~/(\d+)M/g;
 	my (@cigar_d)=$f[5]=~/(\d+)D/g;
@@ -60,7 +63,7 @@ while(<in>)
 	my $aln_ln=sum(@cigar_m,@cigar_d);
 	
 	my $strand="+";
-	if($f[1]=~/r/)
+	if(($f[1] & 16) == 16)
 	{
 	    my $seq=Bio::Seq->new(-seq=>$f[9]);
 	    $f[9]=$seq->revcom->seq;

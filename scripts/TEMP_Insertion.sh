@@ -126,7 +126,7 @@ then cp $BAM.bai ./
 fi
 
 # Get the mate seq of the uniq-unpaired reads
-samtools view -XF 0x2  $name > $i.unpair.sam
+samtools view -F 0x2  $name > $i.unpair.sam
 if [[ $SCORE -eq 0 ]]
 then
     perl $BINDIR/pickUniqPairFastq.pl $i.unpair.sam $i.unpair.uniq
@@ -144,7 +144,7 @@ bwa sampe -P $te $i.unpair.uniq.1.sai $i.unpair.uniq.2.sai $i.unpair.uniq.1.fast
 
 
 #Summary
-samtools view -hSXF 0x2 $i.unpair.uniq.transposons.sam > $i.unpair.uniq.transposons.unpair.sam
+samtools view -hSF 0x2 $i.unpair.uniq.transposons.sam > $i.unpair.uniq.transposons.unpair.sam
 perl $BINDIR/pickUniqMate.pl $i.unpair.uniq.transposons.unpair.sam $i.unpair.uniq.bed > $i.unpair.uniq.transposons.bed
 cp $i.unpair.uniq.transposons.bed $i.unpair.uniq.transposons.filtered.bed
 

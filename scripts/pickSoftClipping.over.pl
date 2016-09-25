@@ -38,7 +38,7 @@ while (my $line=<input>) {
     $chr_num =~ s/chr//;
     if (($chrs{$a[2]} == 1) && (! defined $chrs{$chr_num})) {$chr_num=$a[2];}
     system("samtools view -bu $title $chr_num\:$lower\-$upper > temp.bam");
-    system("samtools view -Xf 0x2 temp.bam > temp.sam");
+    system("samtools view -f 0x2 temp.bam > temp.sam");
 
     my $leftseq="";
     my $rightseq="";
@@ -79,7 +79,9 @@ while (my $line=<input>) {
 	chomp;
 	my @f=split/\t/,$_,12;
 	## read number 1 or 2
-	my ($rnum)=$f[1]=~/(\d)$/;
+	#my ($rnum)=$f[1]=~/(\d)$/;
+        my $rnum=1;
+        if (($f[1] & 128) == 128) {$rnum=2;}
 	
 	## XT:A:* 
 	my ($xt)=$f[11]=~/XT:A:(.)/;
@@ -94,7 +96,7 @@ while (my $line=<input>) {
             my $strand="";
 	    my @z=split(/M/, $f[5]);
 
-            if (($f[5]=~/S$/)&&($f[1]=~/r/))
+            if (($f[5]=~/S$/)&&(($f[1] & 16) == 16))
             {
 		my (@cigar_m)=$f[5]=~/(\d+)M/g;
                 my (@cigar_d)=$f[5]=~/(\d+)D/g;
@@ -116,7 +118,7 @@ while (my $line=<input>) {
 		}
 #		print "\n";
             }
-            elsif (($f[1]=~/R/)&&($z[0]=~/S/)) {
+            elsif ((($f[1] & 32) == 32)&&($z[0]=~/S/)) {
 		$coor=$f[3]; $strand="+";
 		my (@clipped)=$z[0]=~/(\d+)S/g;
                 my $cliplen=sum(@clipped);

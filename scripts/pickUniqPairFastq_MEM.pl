@@ -13,7 +13,9 @@ while(<in>)
 	chomp;
 	my @f=split/\t/,$_,12;
 	## read number 1 or 2
-	my ($rnum)=$f[1]=~/(\d)$/;
+	#my ($rnum)=$f[1]=~/(\d)$/;
+        my $rnum=1;
+        if (($f[1] & 128) == 128) {$rnum=2;}
 
 	## XT:A:* 
 	my $xt="";
@@ -34,7 +36,7 @@ while(<in>)
 	}
 
 	## revcom the read mapped to the reverse strand
-	if($f[1]=~/r/)
+	if (($f[1] & 16) == 16)
 	{
 		my $seq=Bio::Seq->new(-seq=>$f[9]);
 		$f[9]=$seq->revcom->seq;

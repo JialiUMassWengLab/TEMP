@@ -38,7 +38,7 @@ while (my $line=<input>) {
     my $upper=$a[2]+15;
     if (($lower > 0)&&($upper > 0))
     {
-	system("samtools view -hXf 0x2 $ARGV[0].sorted.bam $a[0]\:$lower\-$upper > temp.sam");
+	system("samtools view -hf 0x2 $ARGV[0].sorted.bam $a[0]\:$lower\-$upper > temp.sam");
 	
 	open in,"temp.sam";
 	my %pe1;
@@ -48,7 +48,9 @@ while (my $line=<input>) {
 	    chomp;
 	    my @f=split/\t/,$_,12;
 	    ## read number 1 or 2
-	    my ($rnum)=$f[1]=~/(\d)$/;
+	    #my ($rnum)=$f[1]=~/(\d)$/;
+	    my $rnum=1;
+	    if (($f[1] & 128) == 128) {$rnum=2;}
 	    
 	    ## XT:A:* 
 	    my ($xt)=$f[11]=~/XT:A:(.)/;
@@ -62,7 +64,7 @@ while (my $line=<input>) {
 		my $clipseq="";
 		my @z=split(/M/, $f[5]);
 		
-		if (($f[5]=~/S$/)&&($f[1]=~/r/))
+		if (($f[5]=~/S$/)&&(($f[1] & 16) == 16))
 		{
 		    my (@cigar_m)=$f[5]=~/(\d+)M/g;
 		    my (@cigar_d)=$f[5]=~/(\d+)D/g;
@@ -79,7 +81,7 @@ while (my $line=<input>) {
 		    }
 		}
 
-                elsif (($f[1]=~/R/)&&($z[0]=~/S/))
+                elsif ((($f[1] & 32) == 32)&&($z[0]=~/S/))
                 {
                     $coor=$f[3]; $strand="+";
 
@@ -121,7 +123,9 @@ while (my $line=<input>) {
         {
             chomp;
             my @f=split/\t/,$_,12;
-            my ($rnum)=$f[1]=~/(\d)$/;
+            #my ($rnum)=$f[1]=~/(\d)$/;
+	    my $rnum=1;
+	    if (($f[1] & 128) == 128) {$rnum=2;}
             my ($xt)=$f[11]=~/XT:A:(.)/;
 
             if ($f[5]=~/S/) {
@@ -132,7 +136,7 @@ while (my $line=<input>) {
                 my $clipseq="";
                 my @z=split(/M/, $f[5]);
 
-                if (($f[5]=~/S$/)&&($f[1]=~/r/))
+                if (($f[5]=~/S$/)&&(($f[1] & 16) == 16))
                 {
                     my (@cigar_m)=$f[5]=~/(\d+)M/g;
                     my (@cigar_d)=$f[5]=~/(\d+)D/g;
@@ -149,7 +153,7 @@ while (my $line=<input>) {
                     }
                 }
 
-                elsif (($f[1]=~/R/)&&($z[0]=~/S/))
+                elsif ((($f[1] & 32) == 32)&&($z[0]=~/S/))
                 {
                     $coor=$f[3]; $strand="+";
 

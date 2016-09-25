@@ -29,7 +29,7 @@ while (my $line=<input>) {
     }
     my $lower=$b[0]-$frag;
     my $upper=$c[0]+$frag;
-    system("samtools view -Xf 0x2 $title $a[0]\:$lower\-$upper > temp.sam");
+    system("samtools view -f 0x2 $title $a[0]\:$lower\-$upper > temp.sam");
     
     open in,"temp.sam";
     my %ps=();
@@ -41,13 +41,15 @@ while (my $line=<input>) {
 	chomp;
 	my @f=split/\t/,$_,12;
 	## read number 1 or 2
-	my ($rnum)=$f[1]=~/(\d)$/;
+	#my ($rnum)=$f[1]=~/(\d)$/;
+        my $rnum=1;
+        if (($f[1] & 128) == 128) {$rnum=2;}
 	
 	## XT:A:* 
 	my ($xt)=$f[11]=~/XT:A:(.)/;
 	
 	## Coordinate
-	if ($f[1]=~/r/)
+	if (($f[1] & 16) == 16)
 	{
 	    my (@cigar_m)=$f[5]=~/(\d+)M/g;
 	    my (@cigar_d)=$f[5]=~/(\d+)D/g;

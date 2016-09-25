@@ -116,7 +116,7 @@ then cp $BAM.bai ./
 fi
 
 #Detect excision sites
-samtools view -XF 0x2 $name > $i.unpair.sam
+samtools view -F 0x2 $name > $i.unpair.sam
 awk -F "\t" '{OFS="\t"; if ($9 != 0) print $0}' $i.unpair.sam > temp1.sam
 perl $BINDIR/pickUniqIntervalPos.pl temp1.sam $INSERT > $i.unproper.uniq.interval.bed
 

@@ -10,7 +10,9 @@ while(<in>)
 	chomp;
 	my @f=split/\t/,$_,12;
 	## read number 1 or 2
-	my ($rnum)=$f[1]=~/(\d)$/;
+	#my ($rnum)=$f[1]=~/(\d)$/;
+	my $rnum=1;
+	if (($f[1] & 128) == 128) {$rnum=2;}
 
 	## XT:A:* 
 	my ($xt)=$f[11]=~/XT:A:(.)/;
@@ -18,7 +20,7 @@ while(<in>)
 	my $strand="+";
 
 	## parse CIGAR
-	if(($f[1]=~/R/)&&($f[8] > $ARGV[1])&&($f[8] <= 10000))
+	if((($f[1] & 32) == 32)&&($f[8] > $ARGV[1])&&($f[8] <= 10000))
         {
                 # CIGAR
                 my (@cigar_m)=$f[5]=~/(\d+)M/g;

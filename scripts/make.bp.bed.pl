@@ -18,7 +18,7 @@ for my $i (0..$#a) {
 	my $l=$i+3;
 	system("cut -f7,4,6,$j,$k,$l $ARGV[0] > temp");
 	open (input, "<temp") or die "Can't open temp since $!\n";
-	open (output, ">>$name.insertion.bp.bed") or die "Can't open $name.insertion.bp.bed since $!\n";
+	open (output, ">$name.insertion.bp.bed") or die "Can't open $name.insertion.bp.bed since $!\n";
 	my $header=<input>;
 	while (my $line=<input>) {
 	    chomp($line);
@@ -26,6 +26,7 @@ for my $i (0..$#a) {
 	    if (($b[4] ne "0")||($b[5] ne "0")) {
 		my @c=split(/\:/, $b[2]);
 		my @d=split(/\./, $c[1]);
+		if ($c[0] eq "P") {next;}
 		if ($d[0] > $d[1]) {
 		    my $temp=$d[0];
 		    $d[0]=$d[1];
@@ -33,9 +34,9 @@ for my $i (0..$#a) {
 		}
 		my $lower=$d[0];
 		my $upper=$d[1];
-	        if (($lower >= 0) && ($upper >= 0)) {
-		   print output "$c[0]\t$lower\t$upper\t$b[0]\t$b[1]\t$b[3]\t$b[4]\t$b[5]\n";
-	        }
+		if (($lower >= 0) && ($upper >= 0)) {
+		    print output "$c[0]\t$lower\t$upper\t$b[0]\t$b[1]\t$b[3]\t$b[4]\t$b[5]\n";
+		}
 		$chrs{$c[0]}=1;
 	    }
 	}
@@ -85,25 +86,35 @@ for my $i (0..$#a) {
 	    }
 	    
 	    if (-s "tmp2") {
-		system("bedtools subtract -a tmp -b tmp2 -f 1.0 > tmp3");
-		open (input, "<tmp3") or die "Can't open tmp3 since $!\n";
+		my %to_filter=();
+		open (input, "<tmp2") or die "Can't open tmp2 since $!\n";
+		while (my $line=<input>) {
+		    chomp($line);
+		    my @a=split(/\t/, $line);
+		    $to_filter{"$a[0]\:$a[1]\:$a[2]\:$a[3]\:$a[5]"}=1;
+		}
+		close input;
+		open (input, "<tmp") or die "Can't open tmp since $!\n";
 		open (output, ">$name.insertion.bp.bed") or die "Can't open $name.insertion.bp.bed since $!\n";
 		while (my $line=<input>) {
 		    chomp($line);
 		    my @a=split(/\t/, $line);
-		    my $direction="sense";
-		    if ($a[5] eq "-") {$direction="antisense";}
-		    my $chr_num=$a[0];
-		    $chr_num =~ s/chr//;
-		    if (($chrs{$a[0]} == 1) && (! defined $chrs{$chr_num})) {$chr_num=$a[0];}
-		    print output "$chr_num\t$a[1]\t$a[2]\t$a[3]\t$direction\t$a[6]\t$a[7]\t$a[8]\n";
+		    if (!defined $to_filter{"$a[0]\:$a[1]\:$a[2]\:$a[3]\:$a[5]"}) {
+			my $direction="sense";
+			if ($a[5] eq "-") {$direction="antisense";}
+			my $chr_num=$a[0];
+			$chr_num =~ s/chr//;
+			if (($chrs{$a[0]} == 1) && (! defined $chrs{$chr_num})) {$chr_num=$a[0];}
+			print output "$chr_num\t$a[1]\t$a[2]\t$a[3]\t$direction\t$a[6]\t$a[7]\t$a[8]\n";
+		    }
 		}
 		close input;
 		close output;
 	    }
-	}
 
-	system("rm tmp*");
+	    system("rm tmp*");
+
+	}
 
     }
 }

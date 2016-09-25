@@ -56,7 +56,7 @@ while (my $line=<input>) {
     my $chr_num=$a[0];
     $chr_num =~ s/chr//;
     if (($chrs{$a[0]} == 1) && (! defined $chrs{$chr_num})) {$chr_num=$a[0];}
-    system("samtools view -Xf 0x2 $title $chr_num\:$leftlower\-$leftupper $chr_num\:$rightlower\-$rightupper > temp.sam");
+    system("samtools view -f 0x2 $title $chr_num\:$leftlower\-$leftupper $chr_num\:$rightlower\-$rightupper > temp.sam");
     
     open in,"temp.sam";
     my %ps=();
@@ -70,14 +70,16 @@ while (my $line=<input>) {
 	chomp;
 	my @f=split/\t/,$_,12;
 	## read number 1 or 2
-	my ($rnum)=$f[1]=~/(\d)$/;
+	#my ($rnum)=$f[1]=~/(\d)$/;
+        my $rnum=1;
+        if (($f[1] & 128) == 128) {$rnum=2;}
 	
 	## XT:A:* 
 	my ($xt)=$f[11]=~/XT:A:(.)/;
 	
 	## Coordinate
 	my $coor=$f[3];
-	if ($f[1]=~/r/)
+	if (($f[1] & 16) == 16)
 	{
 	    if ($xt eq "U") {$uniqm{$f[0]}=1;}
 	    my (@cigar_m)=$f[5]=~/(\d+)M/g;
@@ -87,7 +89,7 @@ while (my $line=<input>) {
 	    my $aln_ln=sum(@cigar_m,@cigar_d);
 	    $me{$f[0]}=$f[3]+$aln_ln-1;
 	}
-	elsif ($f[1]=~/R/) {
+	elsif (($f[1] & 32) == 32) {
 	    $ps{$f[0]}=$f[3];
 	    if ($xt eq "U") {$uniqp{$f[0]}=1;}
 	}

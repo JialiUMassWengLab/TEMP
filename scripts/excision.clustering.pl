@@ -8,22 +8,24 @@ open (input, "<$ARGV[0]") or die "Can't open $ARGV[0] since $!\n";
 while (my $line=<input>) {
     chomp($line);
     my @a=split(/\t/, $line);
-    my @b=split(/\#/, $a[8]);
+    #my @b=split(/\#/, $a[8]);
 
-    if (defined $position{$b[0]}) {
-	my @c=split(/\:/, $position{$b[0]});
+    if (defined $position{$a[9]}) {
+	my @c=split(/\:/, $position{$a[9]});
 	if (($c[0] eq $a[0])&&($a[1] < $c[1])) {
-	    $position{$b[0]} =~ s/$c[1]/$a[1]/;
+	    $c[1] = $a[1]
 	}
 	if (($c[0] eq $a[0])&&($a[2] > $c[2])) {
-	    $position{$b[0]} =~ s/$c[2]/$a[2]/;
+	    $c[2] = $a[2]
 	}
+	$position{$a[9]}="$c[0]\:$c[1]\:$c[2]"
+
 	my $transposon=$a[3];
-	if ($names{$b[0]} !~ /$transposon/) {$names{$b[0]}=$names{$b[0]}.",$transposon";}
+	if ($names{$a[9]} !~ /$transposon/) {$names{$a[9]}=$names{$a[9]}.",$transposon";}
     }
     else {
-	$position{$b[0]}="$a[0]\:$a[1]\:$a[2]";
-	$names{$b[0]}=$a[3];
+	$position{$a[9]}="$a[0]\:$a[1]\:$a[2]";
+	$names{$a[9]}=$a[3];
     }
 }
 close input;

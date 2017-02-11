@@ -13,12 +13,12 @@ while (my $line=<input>) {
     if (defined $position{$a[9]}) {
 	my @c=split(/\:/, $position{$a[9]});
 	if (($c[0] eq $a[0])&&($a[1] < $c[1])) {
-	    $c[1] = $a[1]
+	    $c[1] = $a[1];
 	}
 	if (($c[0] eq $a[0])&&($a[2] > $c[2])) {
-	    $c[2] = $a[2]
+	    $c[2] = $a[2];
 	}
-	$position{$a[9]}="$c[0]\:$c[1]\:$c[2]"
+	$position{$a[9]}="$c[0]\:$c[1]\:$c[2]";
 
 	my $transposon=$a[3];
 	if ($names{$a[9]} !~ /$transposon/) {$names{$a[9]}=$names{$a[9]}.",$transposon";}

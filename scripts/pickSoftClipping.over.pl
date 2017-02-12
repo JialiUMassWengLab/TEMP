@@ -32,8 +32,8 @@ while (my $line=<input>) {
     chomp($line);
     my @a=split(/\s+/, $line);
 
-    my $lower=$a[3]-100;
-    my $upper=$a[4]+100;
+    my $lower=$a[3]-10;
+    my $upper=$a[4]+10;
     my $chr_num=$a[2];
     $chr_num =~ s/chr//;
     if (($chrs{$a[2]} == 1) && (! defined $chrs{$chr_num})) {$chr_num=$a[2];}

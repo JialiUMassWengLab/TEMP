@@ -31,7 +31,9 @@ while(<in>)
 		
 #		print $f[2],"\t",$f[3]-1+$aln_ln,"\t",$f[3]+$f[8],"\t$f[0]/$rnum\t","\n";
 		if ($f[2] =~ /^\d{1,2}$/) {$f[2]="chr$f[2]";}
-		print $f[2],"\t",$f[3]-6+$aln_ln,"\t",$f[7]+5,"\t$f[0]/$rnum\t","\n";
+		if ($f[3]+$aln_ln < $f[7]) {
+			print $f[2],"\t",$f[3]-6+$aln_ln,"\t",$f[7]+5,"\t$f[0]/$rnum\t","\n";
+		}
 	}
 }
 close in;
